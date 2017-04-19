@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.itcast.jk.dao.FactoryMapper" >
+  <resultMap id="BaseResultMap" type="cn.itcast.jk.domain.Factory" >
+    <id column="FACTORY_ID" property="id" jdbcType="VARCHAR" />
+    <result column="FULL_NAME" property="fullName" jdbcType="VARCHAR" />
+    <result column="FACTORY_NAME" property="factoryName" jdbcType="VARCHAR" />
+    <result column="CONTRACTOR" property="contractor" jdbcType="VARCHAR" />
+    <result column="PHONE" property="phone" jdbcType="VARCHAR" />
+    <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+    <result column="FAX" property="fax" jdbcType="VARCHAR" />
+    <result column="CNOTE" property="cnote" jdbcType="VARCHAR" />
+    <result column="INSPECTOR" property="inspector" jdbcType="VARCHAR" />
+    <result column="ORDER_NO" property="orderNo" jdbcType="DECIMAL" />
+    <result column="CREATE_BY" property="createBy" jdbcType="VARCHAR" />
+    <result column="CREATE_DEPT" property="createDept" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="STATE" property="state" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 查询 -->
+  <select id="find" resultMap="BaseResultMap" parameterType="map">
+  	select * from factory_c 
+  	where 1=1
+  		<if test="state !=null"> and STATE=#{state}</if>
+  </select>
+   <select id="get" parameterType="string" resultMap="BaseResultMap">
+   	select * from factory_c 
+  	where FACTORY_ID=#{id}
+   </select>
+  <!-- 新增 -->
+  <insert id="insert" parameterType="cn.itcast.jk.domain.Factory">
+  insert into factory_c 
+  (FACTORY_ID,FULL_NAME,FACTORY_NAME,CONTRACTOR,PHONE,MOBILE,FAX,CNOTE,INSPECTOR,ORDER_NO,CREATE_BY,CREATE_DEPT,CREATE_TIME,STATE)
+  values 
+  (#{id},
+  #{fullName},
+  #{factoryName},
+  #{contractor},
+  #{phone},
+  #{mobile},
+  #{fax},
+  #{cnote},
+  #{inspector},
+  #{orderNo},
+  #{createBy},
+  #{createDept},
+  #{createTime},
+  #{state})
+  </insert>
+  <!-- 修改 动态sql -->
+  <update id="update" parameterType="cn.itcast.jk.domain.Factory">
+  	update factory_c
+  	
+  	<set>
+  		<if test="fullName !=null">FULL_NAME=#{fullName},</if>
+  		<if test="factoryName !=null">FACTORY_NAME=#{factoryName},</if>
+  		<if test="contractor !=null">CONTRACTOR=#{contractor},</if>
+  		<if test="phone !=null">PHONE=#{phone},</if>
+  		<if test="mobile !=null">MOBILE=#{mobile},</if>
+  		<if test="fax !=null">FAX=#{fax},</if>
+  		<if test="cnote !=null">CNOTE=#{cnote},</if>
+  		<if test="inspector !=null">INSPECTOR=#{inspector},</if>
+  		<if test="orderNo !=null">ORDER_NO=#{orderNo},</if>
+  		<if test="createBy !=null">CREATE_BY=#{createBy},</if>
+  		<if test="createDept !=null">CREATE_DEPT=#{createDept},</if>
+  		<if test="createTime !=null">CREATE_TIME=#{createTime},</if>
+  		<if test="state !=null">STATE=#{state},</if>
+  	</set>
+  	where FACTORY_ID=#{id}
+  </update>
+  
+  <!-- 删除一条记录 -->
+  <delete id="deleteById" parameterType="string">
+  	DELETE FROM factory_c WHERE FACTORY_ID = #{id}
+  </delete>
+  
+  <!-- 删除多条记录 -->
+  <delete id="delete" parameterType="string">
+  	DELETE FROM factory_c WHERE FACTORY_ID in
+  	<foreach collection="array" item="id" open="(" close=")" separator=",">
+  		#{id}
+  	</foreach>
+  </delete>
+ 
+ <!-- 修改状态 -->
+ <update id="updateState" parameterType="map">
+  	update factory_c set STATE=#{state}
+  	where FACTORY_ID in
+  	<foreach collection="ids" item="id" open="(" close=")" separator=",">
+  		#{id}
+  	</foreach>
+  </update>
+ 
+</mapper>
